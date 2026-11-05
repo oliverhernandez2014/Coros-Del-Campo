@@ -1,17 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#29432d">
+<meta name="theme-color" content="#164A8A">
+
 <title>Lista de reproducción | Coros Del Campo</title>
 
 <style>
 * { box-sizing: border-box; }
 
 :root {
-    --verde: #29432d;
-    --verde-claro: #466444;
+    --azul: #164A8A;
     --crema: #f5efdf;
     --madera: #806044;
 }
@@ -24,7 +25,7 @@ body {
 }
 
 header {
-    background: var(--verde);
+    background: var(--azul);
     color: white;
     text-align: center;
     padding: 20px;
@@ -43,7 +44,7 @@ header h1 {
 }
 
 header p {
-    color: #d7dfcb;
+    color: #d7e4f5;
     font-size: 12px;
     letter-spacing: 2px;
 }
@@ -54,14 +55,14 @@ main {
 }
 
 .back {
-    color: var(--verde);
+    color: var(--azul);
     text-decoration: none;
     font-weight: bold;
 }
 
 h2 {
     font: bold 28px Georgia, serif;
-    color: var(--verde);
+    color: var(--azul);
     text-align: center;
     margin-top: 30px;
 }
@@ -87,7 +88,7 @@ h2 {
     height: 125px;
     border-radius: 50%;
     margin: 0 auto 20px;
-    background: linear-gradient(135deg, #29432d, #806044);
+    background: var(--azul);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -106,7 +107,7 @@ h2 {
 
 #songTitle {
     font: bold 21px Georgia, serif;
-    color: var(--verde);
+    color: var(--azul);
     overflow-wrap: anywhere;
 }
 
@@ -118,7 +119,7 @@ h2 {
 
 .progress {
     width: 100%;
-    accent-color: var(--verde);
+    accent-color: var(--azul);
     cursor: pointer;
 }
 
@@ -134,19 +135,21 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 18px;
+    gap: 12px;
     margin: 22px 0;
+    flex-wrap: wrap;
 }
 
 .control {
     border: none;
-    background: var(--verde);
+    background: var(--azul);
     color: white;
-    width: 48px;
-    height: 48px;
+    width: 45px;
+    height: 45px;
     border-radius: 50%;
-    font-size: 19px;
+    font-size: 18px;
     cursor: pointer;
+    transition: transform .2s, opacity .2s;
 }
 
 .control.main {
@@ -158,6 +161,14 @@ h2 {
 
 .control:hover {
     opacity: .85;
+    transform: scale(1.06);
+}
+
+.control.skip {
+    width: 49px;
+    height: 49px;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .volume {
@@ -165,12 +176,12 @@ h2 {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    color: var(--verde);
+    color: var(--azul);
 }
 
 .volume input {
     width: 120px;
-    accent-color: var(--verde);
+    accent-color: var(--azul);
 }
 
 .playlist {
@@ -190,7 +201,7 @@ h2 {
 }
 
 .playlist-header h3 {
-    color: var(--verde);
+    color: var(--azul);
     font: bold 21px Georgia, serif;
     margin: 5px 0 15px;
 }
@@ -211,7 +222,7 @@ h2 {
 }
 
 #search:focus {
-    border-color: var(--verde);
+    border-color: var(--azul);
 }
 
 .song {
@@ -230,7 +241,7 @@ h2 {
 
 .song.active {
     background: #e9e1ce;
-    color: var(--verde);
+    color: var(--azul);
 }
 
 .song-number {
@@ -246,7 +257,7 @@ h2 {
 }
 
 .song-icon {
-    color: var(--verde);
+    color: var(--azul);
 }
 
 #empty {
@@ -261,19 +272,19 @@ footer {
     margin-top: 55px;
     padding: 25px;
     text-align: center;
-    background: #203325;
+    background: var(--azul);
     color: #eee8d8;
     font-size: 13px;
 }
 
-footer p { color: #c1cbb9; }
+footer p { color: #d7e4f5; }
 
 audio { display: none; }
 
 @media(max-width: 500px) {
     header h1 { font-size: 25px; }
     .player { padding: 20px 14px; }
-    .controls { gap: 13px; }
+    .controls { gap: 10px; }
 }
 </style>
 </head>
@@ -321,9 +332,26 @@ audio { display: none; }
         </div>
 
         <div class="controls">
-            <button class="control" id="previous" title="Anterior">⏮</button>
-            <button class="control main" id="play" title="Reproducir">▶</button>
-            <button class="control" id="next" title="Siguiente">⏭</button>
+
+            <button class="control skip"
+                id="back5" title="Retroceder 5 segundos">
+                -5s
+            </button>
+
+            <button class="control"
+                id="previous" title="Coro anterior">⏮</button>
+
+            <button class="control main"
+                id="play" title="Reproducir">▶</button>
+
+            <button class="control"
+                id="next" title="Siguiente coro">⏭</button>
+
+            <button class="control skip"
+                id="forward5" title="Adelantar 5 segundos">
+                +5s
+            </button>
+
         </div>
 
         <div class="volume">
@@ -433,6 +461,7 @@ async function loadSongs() {
         if (songs.length === 0) {
             songsContainer.innerHTML =
                 '<div id="empty">No encontramos archivos de audio. Comprueba que la carpeta Coros contenga archivos MP3, WAV, OGG, M4A o AAC.</div>';
+
             document.getElementById("songStatus").textContent =
                 "No hay coros disponibles";
         } else {
@@ -511,18 +540,41 @@ function playSong(index) {
     document.getElementById("songStatus").textContent =
         "Reproduciendo Coros Del Campo";
 
-    audio.play().then(() => {
-        playButton.textContent = "⏸";
-        disc.classList.add("playing");
-    }).catch(() => {
+    document.getElementById("progress").value = 0;
+    document.getElementById("currentTime").textContent = "0:00";
+    document.getElementById("duration").textContent = "0:00";
+
+    audio.play().catch(() => {
         document.getElementById("songStatus").textContent =
             "No se pudo reproducir. Intenta nuevamente.";
+
         playButton.textContent = "▶";
         disc.classList.remove("playing");
     });
 
     renderSongs(search.value);
 }
+
+/* Adelantar o retroceder segundos */
+function seekBy(seconds) {
+    if (
+        currentIndex === -1 ||
+        !Number.isFinite(audio.duration)
+    ) return;
+
+    audio.currentTime = Math.max(
+        0,
+        Math.min(audio.duration, audio.currentTime + seconds)
+    );
+}
+
+document.getElementById("back5").addEventListener("click", () => {
+    seekBy(-5);
+});
+
+document.getElementById("forward5").addEventListener("click", () => {
+    seekBy(5);
+});
 
 playButton.addEventListener("click", () => {
     if (currentIndex === -1) {
@@ -573,6 +625,7 @@ audio.addEventListener("ended", () => {
     } else {
         playButton.textContent = "▶";
         disc.classList.remove("playing");
+
         document.getElementById("songStatus").textContent =
             "Lista finalizada";
     }
