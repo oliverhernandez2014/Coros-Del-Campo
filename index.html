@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#29432d">
+
+<title>Coros Del Campo</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --verde: #29432d;
+    --verde-claro: #466444;
+    --crema: #f5efdf;
+    --madera: #806044;
+    --texto: #302d24;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--crema);
+    color: var(--texto);
+}
+
+/* ENCABEZADO */
+
+header {
+    background: var(--verde);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-bottom: 5px solid #a58a5c;
+}
+
+.logo {
+    font-size: 42px;
+}
+
+header h1 {
+    margin: 5px 0;
+    font-family: Georgia, serif;
+    font-size: 30px;
+}
+
+header p {
+    margin: 5px 0;
+    color: #d7dfcb;
+    font-size: 13px;
+    letter-spacing: 2px;
+}
+
+/* PORTADA */
+
+.hero {
+    min-height: 310px;
+    padding: 60px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+
+    background:
+        linear-gradient(#182b20a8, #182b20b8),
+        linear-gradient(135deg, #66834d, #9b9661, #604b31);
+}
+
+.hero-content {
+    max-width: 650px;
+}
+
+.hero h2 {
+    font-family: Georgia, serif;
+    font-size: clamp(32px, 6vw, 48px);
+    margin: 0 0 15px;
+}
+
+.hero p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #f1eee2;
+}
+
+/* MENÚ */
+
+main {
+    width: min(950px, 90%);
+    margin: 45px auto;
+}
+
+.section-title {
+    text-align: center;
+    font-family: Georgia, serif;
+    font-size: 28px;
+    color: var(--verde);
+    margin-bottom: 10px;
+}
+
+.section-description {
+    text-align: center;
+    color: #77715f;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 190px;
+    padding: 25px 15px;
+
+    background: #fffdf6;
+    border: 1px solid #d9cfb6;
+    border-bottom: 5px solid var(--madera);
+    border-radius: 12px;
+
+    color: var(--verde);
+    text-decoration: none;
+
+    transition: transform .2s, box-shadow .2s;
+}
+
+.menu-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 22px #473b201b;
+}
+
+.menu-icon {
+    font-size: 45px;
+    margin-bottom: 12px;
+}
+
+.menu-btn strong {
+    font-family: Georgia, serif;
+    font-size: 21px;
+}
+
+.menu-btn small {
+    color: #77715f;
+    margin-top: 9px;
+    font-size: 13px;
+}
+
+/* INFORMACIÓN */
+
+.info {
+    margin-top: 40px;
+    padding: 22px;
+    text-align: center;
+    background: #e9e1ce;
+    border-radius: 10px;
+    border-left: 5px solid var(--verde-claro);
+    line-height: 1.7;
+}
+
+.info h3 {
+    color: var(--verde);
+    font-family: Georgia, serif;
+}
+
+/* PIE */
+
+footer {
+    margin-top: 60px;
+    padding: 30px 15px;
+    text-align: center;
+    color: #eee8d8;
+    background: #203325;
+}
+
+footer strong {
+    font-family: Georgia, serif;
+    font-size: 21px;
+}
+
+footer p {
+    color: #c1cbb9;
+    font-size: 13px;
+}
+
+@media(max-width: 500px) {
+    header h1 {
+        font-size: 25px;
+    }
+
+    .hero {
+        min-height: 270px;
+    }
+
+    main {
+        width: 92%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🌾</div>
+    <h1>Coros Del Campo</h1>
+    <p>TRADICIÓN · FE · MÚSICA</p>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h2>¡Bienvenidos a Coros Del Campo!</h2>
+
+        <p>
+            Un espacio para compartir nuestra música,
+            nuestros cantos y nuestras tradiciones.
+            ¡Que la música nos acompañe!
+        </p>
+    </div>
+</section>
+
+<main>
+
+    <h2 class="section-title">Nuestro espacio</h2>
+
+    <p class="section-description">
+        Explora nuestras plataformas y disfruta
+        de los coros de nuestra comunidad.
+    </p>
+
+    <div class="menu">
+
+        <!-- TIKTOK -->
+        <a
+            class="menu-btn"
+            href="https://www.tiktok.com/@nieves.francisco6"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <span class="menu-icon">🎵</span>
+            <strong>TikTok</strong>
+            <small>Visita nuestra cuenta</small>
+        </a>
+
+        <!-- RADIO -->
+        <a class="menu-btn" href="Radio.html">
+            <span class="menu-icon">📻</span>
+            <strong>Radio Web</strong>
+            <small>Escucha nuestra radio</small>
+        </a>
+
+        <!-- COROS -->
+        <a class="menu-btn" href="Coros.html">
+            <span class="menu-icon">🎶</span>
+            <strong>Lista de reproducción</strong>
+            <small>Descubre todos nuestros coros</small>
+        </a>
+
+    </div>
+
+    <section class="info">
+        <h3>🌿 Nuestra música, nuestra tradición</h3>
+        <p>
+            Coros Del Campo es un espacio dedicado
+            a compartir música y mantener vivas
+            nuestras tradiciones.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <strong>🌾 Coros Del Campo</strong>
+    <p>Tradición, fe y música para todos.</p>
+    <p>© 2026 Coros Del Campo</p>
+</footer>
+
+</body>
+</html>
