@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#29432d">
+<title>Lista de reproducción | Coros Del Campo</title>
+
+<style>
+* { box-sizing: border-box; }
+
+:root {
+    --verde: #29432d;
+    --verde-claro: #466444;
+    --crema: #f5efdf;
+    --madera: #806044;
+}
+
+body {
+    margin: 0;
+    background: var(--crema);
+    color: #302d24;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background: var(--verde);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 5px solid #a58a5c;
+}
+
+.logo img {
+    width: 95px;
+    height: 95px;
+    object-fit: contain;
+}
+
+header h1 {
+    font: bold 29px Georgia, serif;
+    margin: 8px 0;
+}
+
+header p {
+    color: #d7dfcb;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+main {
+    width: min(850px, 92%);
+    margin: 35px auto;
+}
+
+.back {
+    color: var(--verde);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+h2 {
+    font: bold 28px Georgia, serif;
+    color: var(--verde);
+    text-align: center;
+    margin-top: 30px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #77715f;
+    margin-bottom: 25px;
+}
+
+.player {
+    background: #fffdf6;
+    border: 1px solid #d9cfb6;
+    border-bottom: 5px solid var(--madera);
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 20px #473b2010;
+}
+
+.disc {
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    background: linear-gradient(135deg, #29432d, #806044);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 52px;
+    border: 7px solid #e9e1ce;
+}
+
+.disc.playing {
+    animation: rotate 5s linear infinite;
+}
+
+@keyframes rotate {
+    to { transform: rotate(360deg); }
+}
+
+#songTitle {
+    font: bold 21px Georgia, serif;
+    color: var(--verde);
+    overflow-wrap: anywhere;
+}
+
+#songStatus {
+    color: #827963;
+    font-size: 13px;
+    margin: 8px 0 20px;
+}
+
+.progress {
+    width: 100%;
+    accent-color: var(--verde);
+    cursor: pointer;
+}
+
+.times {
+    display: flex;
+    justify-content: space-between;
+    color: #77715f;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin: 22px 0;
+}
+
+.control {
+    border: none;
+    background: var(--verde);
+    color: white;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.control.main {
+    width: 60px;
+    height: 60px;
+    font-size: 25px;
+    background: var(--madera);
+}
+
+.control:hover {
+    opacity: .85;
+}
+
+.volume {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--verde);
+}
+
+.volume input {
+    width: 120px;
+    accent-color: var(--verde);
+}
+
+.playlist {
+    margin-top: 30px;
+    background: #fffdf6;
+    border: 1px solid #d9cfb6;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.playlist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.playlist-header h3 {
+    color: var(--verde);
+    font: bold 21px Georgia, serif;
+    margin: 5px 0 15px;
+}
+
+#count {
+    font-size: 12px;
+    color: #77715f;
+}
+
+#search {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d9cfb6;
+    border-radius: 8px;
+    margin: 10px 0 15px;
+    outline: none;
+    font-size: 14px;
+}
+
+#search:focus {
+    border-color: var(--verde);
+}
+
+.song {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 10px;
+    border-bottom: 1px solid #eee6d5;
+    cursor: pointer;
+    border-radius: 7px;
+}
+
+.song:hover {
+    background: #f3eddf;
+}
+
+.song.active {
+    background: #e9e1ce;
+    color: var(--verde);
+}
+
+.song-number {
+    width: 25px;
+    color: #8b826e;
+    font-size: 13px;
+}
+
+.song-name {
+    flex: 1;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.song-icon {
+    color: var(--verde);
+}
+
+#empty {
+    text-align: center;
+    color: #77715f;
+    padding: 25px 5px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+footer {
+    margin-top: 55px;
+    padding: 25px;
+    text-align: center;
+    background: #203325;
+    color: #eee8d8;
+    font-size: 13px;
+}
+
+footer p { color: #c1cbb9; }
+
+audio { display: none; }
+
+@media(max-width: 500px) {
+    header h1 { font-size: 25px; }
+    .player { padding: 20px 14px; }
+    .controls { gap: 13px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <img src="logo.jpg" alt="Coros Del Campo">
+    </div>
+    <h1>Coros Del Campo</h1>
+    <p>TRADICIÓN · FE · MÚSICA</p>
+</header>
+
+<main>
+
+    <a class="back" href="index.html">← Volver al inicio</a>
+
+    <h2>Lista de reproducción</h2>
+    <p class="subtitle">
+        Disfruta de todos nuestros coros.
+    </p>
+
+    <section class="player">
+
+        <div class="disc" id="disc">🎵</div>
+
+        <div id="songTitle">Selecciona un coro</div>
+        <div id="songStatus">Preparando la música...</div>
+
+        <audio id="audio" preload="metadata"></audio>
+
+        <input
+            class="progress"
+            id="progress"
+            type="range"
+            min="0"
+            max="100"
+            value="0"
+        >
+
+        <div class="times">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
+
+        <div class="controls">
+            <button class="control" id="previous" title="Anterior">⏮</button>
+            <button class="control main" id="play" title="Reproducir">▶</button>
+            <button class="control" id="next" title="Siguiente">⏭</button>
+        </div>
+
+        <div class="volume">
+            <span>🔊</span>
+            <input type="range" id="volume"
+                min="0" max="1" step="0.01" value="0.8">
+        </div>
+
+    </section>
+
+    <section class="playlist">
+
+        <div class="playlist-header">
+            <h3>🎶 Nuestros coros</h3>
+            <span id="count">Cargando...</span>
+        </div>
+
+        <input
+            type="search"
+            id="search"
+            placeholder="Buscar un coro..."
+        >
+
+        <div id="songs">
+            <div id="empty">Buscando los coros del repositorio...</div>
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+    <strong>Coros Del Campo</strong>
+    <p>Tradición, fe y música para todos.</p>
+    <p>© 2026 Coros Del Campo</p>
+</footer>
+
+<script>
+const OWNER = "oliverhernandez2014";
+const REPO = "Coros-Del-Campo";
+const FOLDER = "Coros";
+const BRANCH = "main";
+
+const audio = document.getElementById("audio");
+const playButton = document.getElementById("play");
+const songsContainer = document.getElementById("songs");
+const search = document.getElementById("search");
+const disc = document.getElementById("disc");
+
+let songs = [];
+let currentIndex = -1;
+
+const extensions = [".mp3", ".wav", ".ogg", ".m4a", ".aac"];
+
+function formatTime(seconds) {
+    if (!Number.isFinite(seconds)) return "0:00";
+
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+
+    return minutes + ":" + String(secs).padStart(2, "0");
+}
+
+function cleanName(filename) {
+    return filename.replace(/\.[^/.]+$/, "")
+        .replace(/[_-]/g, " ");
+}
+
+async function loadSongs() {
+    const api =
+        `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}?ref=${BRANCH}`;
+
+    try {
+        const response = await fetch(api);
+
+        if (!response.ok) {
+            throw new Error("GitHub respondió: " + response.status);
+        }
+
+        const files = await response.json();
+
+        if (!Array.isArray(files)) {
+            throw new Error("No se encontró la carpeta de coros.");
+        }
+
+        songs = files
+            .filter(file =>
+                file.type === "file" &&
+                extensions.some(ext =>
+                    file.name.toLowerCase().endsWith(ext)
+                )
+            )
+            .sort((a, b) =>
+                a.name.localeCompare(b.name, "es",
+                    { sensitivity: "base" })
+            )
+            .map(file => ({
+                name: cleanName(file.name),
+                url: file.download_url
+            }));
+
+        renderSongs();
+
+        document.getElementById("count").textContent =
+            songs.length + (songs.length === 1 ? " coro" : " coros");
+
+        if (songs.length === 0) {
+            songsContainer.innerHTML =
+                '<div id="empty">No encontramos archivos de audio. Comprueba que la carpeta Coros contenga archivos MP3, WAV, OGG, M4A o AAC.</div>';
+            document.getElementById("songStatus").textContent =
+                "No hay coros disponibles";
+        } else {
+            document.getElementById("songStatus").textContent =
+                "Selecciona un coro para comenzar";
+        }
+
+    } catch (error) {
+        console.error(error);
+
+        document.getElementById("count").textContent =
+            "No disponible";
+
+        songsContainer.innerHTML =
+            '<div id="empty">No pudimos cargar los coros.<br>Comprueba que el repositorio sea público y que la carpeta se llame exactamente Coros.</div>';
+
+        document.getElementById("songStatus").textContent =
+            "Error al cargar la lista";
+    }
+}
+
+function renderSongs(filter = "") {
+    songsContainer.innerHTML = "";
+
+    const filtered = songs
+        .map((song, index) => ({ ...song, index }))
+        .filter(song =>
+            song.name.toLowerCase().includes(filter.toLowerCase())
+        );
+
+    if (!filtered.length) {
+        songsContainer.innerHTML =
+            '<div id="empty">No se encontraron coros.</div>';
+        return;
+    }
+
+    filtered.forEach(song => {
+        const item = document.createElement("div");
+        item.className = "song" +
+            (song.index === currentIndex ? " active" : "");
+
+        const number = document.createElement("span");
+        number.className = "song-number";
+        number.textContent =
+            song.index === currentIndex ? "▶" : song.index + 1;
+
+        const name = document.createElement("span");
+        name.className = "song-name";
+        name.textContent = song.name;
+
+        const icon = document.createElement("span");
+        icon.className = "song-icon";
+        icon.textContent = "♫";
+
+        item.append(number, name, icon);
+
+        item.addEventListener("click", () => {
+            playSong(song.index);
+        });
+
+        songsContainer.appendChild(item);
+    });
+}
+
+function playSong(index) {
+    if (index < 0 || index >= songs.length) return;
+
+    currentIndex = index;
+
+    audio.src = songs[index].url;
+    audio.load();
+
+    document.getElementById("songTitle").textContent =
+        songs[index].name;
+
+    document.getElementById("songStatus").textContent =
+        "Reproduciendo Coros Del Campo";
+
+    audio.play().then(() => {
+        playButton.textContent = "⏸";
+        disc.classList.add("playing");
+    }).catch(() => {
+        document.getElementById("songStatus").textContent =
+            "No se pudo reproducir. Intenta nuevamente.";
+        playButton.textContent = "▶";
+        disc.classList.remove("playing");
+    });
+
+    renderSongs(search.value);
+}
+
+playButton.addEventListener("click", () => {
+    if (currentIndex === -1) {
+        if (songs.length) playSong(0);
+        return;
+    }
+
+    if (audio.paused) {
+        audio.play().catch(() => {});
+    } else {
+        audio.pause();
+    }
+});
+
+document.getElementById("previous").addEventListener("click", () => {
+    if (!songs.length) return;
+
+    const index = currentIndex <= 0
+        ? songs.length - 1
+        : currentIndex - 1;
+
+    playSong(index);
+});
+
+document.getElementById("next").addEventListener("click", () => {
+    if (!songs.length) return;
+
+    const index = currentIndex >= songs.length - 1
+        ? 0
+        : currentIndex + 1;
+
+    playSong(index);
+});
+
+audio.addEventListener("play", () => {
+    playButton.textContent = "⏸";
+    disc.classList.add("playing");
+});
+
+audio.addEventListener("pause", () => {
+    playButton.textContent = "▶";
+    disc.classList.remove("playing");
+});
+
+audio.addEventListener("ended", () => {
+    if (currentIndex < songs.length - 1) {
+        playSong(currentIndex + 1);
+    } else {
+        playButton.textContent = "▶";
+        disc.classList.remove("playing");
+        document.getElementById("songStatus").textContent =
+            "Lista finalizada";
+    }
+});
+
+audio.addEventListener("timeupdate", () => {
+    if (!audio.duration) return;
+
+    document.getElementById("progress").value =
+        (audio.currentTime / audio.duration) * 100;
+
+    document.getElementById("currentTime").textContent =
+        formatTime(audio.currentTime);
+
+    document.getElementById("duration").textContent =
+        formatTime(audio.duration);
+});
+
+audio.addEventListener("loadedmetadata", () => {
+    document.getElementById("duration").textContent =
+        formatTime(audio.duration);
+});
+
+document.getElementById("progress").addEventListener("input", event => {
+    if (audio.duration) {
+        audio.currentTime =
+            (Number(event.target.value) / 100) * audio.duration;
+    }
+});
+
+document.getElementById("volume").addEventListener("input", event => {
+    audio.volume = Number(event.target.value);
+});
+
+audio.volume = 0.8;
+
+search.addEventListener("input", () => {
+    renderSongs(search.value);
+});
+
+loadSongs();
+</script>
+
+</body>
+</html>
