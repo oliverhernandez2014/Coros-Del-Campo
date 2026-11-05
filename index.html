@@ -39,7 +39,16 @@ header {
 }
 
 .logo {
-    font-size: 42px;
+    margin-bottom: 8px;
+}
+
+.logo img {
+    width: 115px;
+    height: 115px;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
 }
 
 header h1 {
@@ -193,9 +202,16 @@ footer p {
     font-size: 13px;
 }
 
+/* MÓVILES */
+
 @media(max-width: 500px) {
     header h1 {
         font-size: 25px;
+    }
+
+    .logo img {
+        width: 100px;
+        height: 100px;
     }
 
     .hero {
@@ -211,14 +227,23 @@ footer p {
 
 <body>
 
+<!-- ENCABEZADO -->
 <header>
-    <div class="logo">🌾</div>
+
+    <div class="logo">
+        <img src="logo.jpg" alt="Logo de Coros Del Campo">
+    </div>
+
     <h1>Coros Del Campo</h1>
     <p>TRADICIÓN · FE · MÚSICA</p>
+
 </header>
 
+<!-- PORTADA -->
 <section class="hero">
+
     <div class="hero-content">
+
         <h2>¡Bienvenidos a Coros Del Campo!</h2>
 
         <p>
@@ -226,9 +251,12 @@ footer p {
             nuestros cantos y nuestras tradiciones.
             ¡Que la música nos acompañe!
         </p>
+
     </div>
+
 </section>
 
+<!-- CONTENIDO PRINCIPAL -->
 <main>
 
     <h2 class="section-title">Nuestro espacio</h2>
@@ -247,42 +275,57 @@ footer p {
             target="_blank"
             rel="noopener noreferrer"
         >
+
             <span class="menu-icon">🎵</span>
             <strong>TikTok</strong>
             <small>Visita nuestra cuenta</small>
+
         </a>
 
         <!-- RADIO -->
         <a class="menu-btn" href="Radio.html">
+
             <span class="menu-icon">📻</span>
             <strong>Radio Web</strong>
             <small>Escucha nuestra radio</small>
+
         </a>
 
-        <!-- COROS -->
+        <!-- LISTA DE REPRODUCCIÓN -->
         <a class="menu-btn" href="Coros.html">
+
             <span class="menu-icon">🎶</span>
             <strong>Lista de reproducción</strong>
             <small>Descubre todos nuestros coros</small>
+
         </a>
 
     </div>
 
+    <!-- INFORMACIÓN -->
     <section class="info">
+
         <h3>🌿 Nuestra música, nuestra tradición</h3>
+
         <p>
             Coros Del Campo es un espacio dedicado
             a compartir música y mantener vivas
             nuestras tradiciones.
         </p>
+
     </section>
 
 </main>
 
+<!-- PIE DE PÁGINA -->
 <footer>
-    <strong>🌾 Coros Del Campo</strong>
+
+    <strong>Coros Del Campo</strong>
+
     <p>Tradición, fe y música para todos.</p>
+
     <p>© 2026 Coros Del Campo</p>
+
 </footer>
 
 </body>
