@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#164A8A">
+
 <title>Lista de reproducción | Coros Del Campo</title>
 
 <style>
@@ -300,61 +301,85 @@ audio { display: none; }
 
 <main>
 
-<a class="back" href="index.html">← Volver al inicio</a>
+    <a class="back" href="index.html">← Volver al inicio</a>
 
-<h2>Lista de reproducción</h2>
-<p class="subtitle">Disfruta de todos nuestros coros.</p>
+    <h2>Lista de reproducción</h2>
+    <p class="subtitle">
+        Disfruta de todos nuestros coros.
+    </p>
 
-<section class="player">
+    <section class="player">
 
-    <div class="disc" id="disc">🎵</div>
+        <div class="disc" id="disc">🎵</div>
 
-    <div id="songTitle">Selecciona un coro</div>
-    <div id="songStatus">Conectando con Supabase...</div>
+        <div id="songTitle">Selecciona un coro</div>
+        <div id="songStatus">Preparando la música...</div>
 
-    <audio id="audio" preload="metadata"></audio>
+        <audio id="audio" preload="metadata"></audio>
 
-    <input class="progress" id="progress"
-        type="range" min="0" max="100" value="0">
+        <input
+            class="progress"
+            id="progress"
+            type="range"
+            min="0"
+            max="100"
+            value="0"
+        >
 
-    <div class="times">
-        <span id="currentTime">0:00</span>
-        <span id="duration">0:00</span>
-    </div>
+        <div class="times">
+            <span id="currentTime">0:00</span>
+            <span id="duration">0:00</span>
+        </div>
 
-    <div class="controls">
+        <div class="controls">
 
-        <button class="control skip" id="back5">-5s</button>
-        <button class="control" id="previous">⏮</button>
-        <button class="control main" id="play">▶</button>
-        <button class="control" id="next">⏭</button>
-        <button class="control skip" id="forward5">+5s</button>
+            <button class="control skip"
+                id="back5" title="Retroceder 5 segundos">
+                -5s
+            </button>
 
-    </div>
+            <button class="control"
+                id="previous" title="Coro anterior">⏮</button>
 
-    <div class="volume">
-        <span>🔊</span>
-        <input type="range" id="volume"
-            min="0" max="1" step="0.01" value="0.8">
-    </div>
+            <button class="control main"
+                id="play" title="Reproducir">▶</button>
 
-</section>
+            <button class="control"
+                id="next" title="Siguiente coro">⏭</button>
 
-<section class="playlist">
+            <button class="control skip"
+                id="forward5" title="Adelantar 5 segundos">
+                +5s
+            </button>
 
-    <div class="playlist-header">
-        <h3>🎶 Nuestros coros</h3>
-        <span id="count">Cargando...</span>
-    </div>
+        </div>
 
-    <input type="search" id="search"
-        placeholder="Buscar un coro...">
+        <div class="volume">
+            <span>🔊</span>
+            <input type="range" id="volume"
+                min="0" max="1" step="0.01" value="0.8">
+        </div>
 
-    <div id="songs">
-        <div id="empty">Conectando con la biblioteca musical...</div>
-    </div>
+    </section>
 
-</section>
+    <section class="playlist">
+
+        <div class="playlist-header">
+            <h3>🎶 Nuestros coros</h3>
+            <span id="count">Cargando...</span>
+        </div>
+
+        <input
+            type="search"
+            id="search"
+            placeholder="Buscar un coro..."
+        >
+
+        <div id="songs">
+            <div id="empty">Buscando los coros del repositorio...</div>
+        </div>
+
+    </section>
 
 </main>
 
@@ -365,8 +390,10 @@ audio { display: none; }
 </footer>
 
 <script>
-const FUNCTION_URL =
-"https://nvsxtaxtjrewpoyoimys.supabase.co/functions/v1/obtener-coros";
+const OWNER = "oliverhernandez2014";
+const REPO = "Coros-Del-Campo";
+const FOLDER = "Coros";
+const BRANCH = "main";
 
 const audio = document.getElementById("audio");
 const playButton = document.getElementById("play");
@@ -376,6 +403,8 @@ const disc = document.getElementById("disc");
 
 let songs = [];
 let currentIndex = -1;
+
+const extensions = [".mp3", ".wav", ".ogg", ".m4a", ".aac"];
 
 function formatTime(seconds) {
     if (!Number.isFinite(seconds)) return "0:00";
@@ -387,45 +416,41 @@ function formatTime(seconds) {
 }
 
 function cleanName(filename) {
-    return filename
-        .replace(/\.[^/.]+$/, "")
+    return filename.replace(/\.[^/.]+$/, "")
         .replace(/[_-]/g, " ");
 }
 
-/* Cargar coros desde Supabase */
 async function loadSongs() {
+    const api =
+        `https://api.github.com/repos/${OWNER}/${REPO}/contents/${FOLDER}?ref=${BRANCH}`;
+
     try {
-        const response = await fetch(FUNCTION_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({})
-        });
+        const response = await fetch(api);
 
         if (!response.ok) {
-            throw new Error("Error HTTP: " + response.status);
+            throw new Error("GitHub respondió: " + response.status);
         }
 
         const files = await response.json();
 
         if (!Array.isArray(files)) {
-            throw new Error(files.error || "Respuesta incorrecta");
+            throw new Error("No se encontró la carpeta de coros.");
         }
 
         songs = files
             .filter(file =>
-                file.name && file.url &&
-                /\.(mp3|wav|ogg|m4a|aac)$/i.test(file.name)
+                file.type === "file" &&
+                extensions.some(ext =>
+                    file.name.toLowerCase().endsWith(ext)
+                )
             )
             .sort((a, b) =>
-                a.name.localeCompare(b.name, "es", {
-                    sensitivity: "base"
-                })
+                a.name.localeCompare(b.name, "es",
+                    { sensitivity: "base" })
             )
             .map(file => ({
                 name: cleanName(file.name),
-                url: file.url
+                url: file.download_url
             }));
 
         renderSongs();
@@ -433,14 +458,15 @@ async function loadSongs() {
         document.getElementById("count").textContent =
             songs.length + (songs.length === 1 ? " coro" : " coros");
 
-        document.getElementById("songStatus").textContent =
-            songs.length
-                ? "Selecciona un coro para comenzar"
-                : "No hay coros disponibles";
-
-        if (!songs.length) {
+        if (songs.length === 0) {
             songsContainer.innerHTML =
-                '<div id="empty">Todavía no hay archivos de audio en Supabase.</div>';
+                '<div id="empty">No encontramos archivos de audio. Comprueba que la carpeta Coros contenga archivos MP3, WAV, OGG, M4A o AAC.</div>';
+
+            document.getElementById("songStatus").textContent =
+                "No hay coros disponibles";
+        } else {
+            document.getElementById("songStatus").textContent =
+                "Selecciona un coro para comenzar";
         }
 
     } catch (error) {
@@ -449,11 +475,11 @@ async function loadSongs() {
         document.getElementById("count").textContent =
             "No disponible";
 
-        document.getElementById("songStatus").textContent =
-            "Error al conectar con Supabase";
-
         songsContainer.innerHTML =
-            '<div id="empty">No pudimos cargar los coros.<br>Comprueba la conexión con Supabase y vuelve a intentarlo.</div>';
+            '<div id="empty">No pudimos cargar los coros.<br>Comprueba que el repositorio sea público y que la carpeta se llame exactamente Coros.</div>';
+
+        document.getElementById("songStatus").textContent =
+            "Error al cargar la lista";
     }
 }
 
@@ -474,7 +500,6 @@ function renderSongs(filter = "") {
 
     filtered.forEach(song => {
         const item = document.createElement("div");
-
         item.className = "song" +
             (song.index === currentIndex ? " active" : "");
 
@@ -519,8 +544,6 @@ function playSong(index) {
     document.getElementById("currentTime").textContent = "0:00";
     document.getElementById("duration").textContent = "0:00";
 
-    renderSongs(search.value);
-
     audio.play().catch(() => {
         document.getElementById("songStatus").textContent =
             "No se pudo reproducir. Intenta nuevamente.";
@@ -528,8 +551,11 @@ function playSong(index) {
         playButton.textContent = "▶";
         disc.classList.remove("playing");
     });
+
+    renderSongs(search.value);
 }
 
+/* Adelantar o retroceder segundos */
 function seekBy(seconds) {
     if (
         currentIndex === -1 ||
